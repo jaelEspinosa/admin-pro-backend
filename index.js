@@ -15,13 +15,13 @@ app.use(cors())
 //connectarDB
 dbConnection()
 
+
+//lectura y parseo del body request
+app.use( express.json())
+
 //Rutas
-app.get('/', (req, res)=>{
-  res.json({
-    ok:true,
-    msg:'hola mundo'
-  })
-})
+app.use('/api/usuarios', require('./routes/usuarios'))
+app.use('/api/login', require('./routes/auth'))
 
 
 
