@@ -22,7 +22,12 @@ app.use( express.json())
 //Rutas
 app.use('/api/usuarios', require('./routes/usuarios'))
 app.use('/api/login', require('./routes/auth'))
+app.use('/api/hospitales', require('./routes/hospitales.js'))
 
+app.use('/api/medicos', require('./routes/medicos.js'))
+app.use('/api/todo', require('./routes/busquedas.js'))
+
+app.use('/api/uploads', require('./routes/uploads.js'))
 
 
 
