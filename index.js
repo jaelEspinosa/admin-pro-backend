@@ -19,6 +19,10 @@ dbConnection()
 //lectura y parseo del body request
 app.use( express.json())
 
+//Carpeta pública
+
+app.use(express.static('public'))
+
 //Rutas
 app.use('/api/usuarios', require('./routes/usuarios'))
 app.use('/api/login', require('./routes/auth'))

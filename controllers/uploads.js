@@ -2,7 +2,8 @@ const { response } = require("express");
 const {v4: uuidv4} = require('uuid');
 const { actualizarImagen } = require("../helpers/actualizar-imagen");
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs');
+const { log } = require("console");
 
 
 const fileUpload = async (req, res= response) =>{
@@ -20,6 +21,7 @@ const fileUpload = async (req, res= response) =>{
       };
 
     // validar que existe un archivo
+  
     if(!req.files || Object.keys(req.files).length === 0){
         return res.status(400).json({
             ok:false,
@@ -38,7 +40,17 @@ const fileUpload = async (req, res= response) =>{
             ok:false,
         	msg:'Archivo no válido.'
         });
+    };
+    
+    // validar tamaño img
+    const { size } = req.files.img
+    if( size > 25000){
+        return res.status(406).json({
+            ok:false,
+            msg:'Tamaño máximo excedido, se requiere una imagen mas pequeña'
+        })
     }
+
     // Generar el nombre del archivo
     const nombreArchivo = `${uuidv4()}.${extension}`
 
