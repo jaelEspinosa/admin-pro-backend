@@ -1,6 +1,7 @@
 
 const { response } = require("express");
 const Medico = require("../models/medico.js");
+const Hospital = require("../models/hospital.js");
 
 
 
@@ -65,18 +66,68 @@ const crearMedico = async (req, res=response) =>{
 
 };
 
-const actualizarMedico = async (req, res=response) =>{
-    res.status(200).json({
+const actualizarMedico = async (req, res=response) =>{    
+    const { id } = req.params
+    const uid = req.uid;
+try {
+    const medicoDB = await Medico.findById( id )
+
+    if(!medicoDB){
+        return res.status(404).json({
+            true: false,
+            msg:'No se encontró el médico'
+        })
+    };
+
+    const medicoActualizado = await Medico.findByIdAndUpdate(id, {...req.body, usuario: uid},{new:true});
+    
+    return res.status(200).json({
         ok:true,
-        msg:'Actualizando'
-    })
+        medico: medicoActualizado
+    });
+
+} catch (error) {
+    console.log(error);
+    return res.status(500).json({
+        ok:false,
+        msg:'hable con el administrador'
+    });
+ };
 };
 
+
+
+
+
 const deleteMedico = async (req, res=response) =>{
-    res.status(200).json({
-        ok:true,
-        msg:'Borrando...'
-    })
+
+    const { id } = req.params;
+
+    try {
+        const medicoToDelete = await Medico.findById( id )
+        
+        if (!medicoToDelete){
+         return res.status(404).json({
+                ok:false,
+                msg:'No hemos encontrado ese médico en la base de datos.'
+            })
+        };
+
+        await medicoToDelete.deleteOne()
+        return res.status(200).json({
+            ok:true,
+            msg:'Borrado con éxito...'
+        })
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            ok:false,
+            msg:'Hable con un administrador'
+        })
+    }
+
+   
 };
 
 

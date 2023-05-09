@@ -87,7 +87,23 @@ const googleSingIn = async (req, res = response) =>{
 };
 
 
+const renewToken = async (req, res=response) => {
+
+    const uid = req.uid
+   // generar un nuevo TOKEN - JWT
+
+   const token = await generarJWT( uid )
+
+   return res.status(200).json({
+            ok:true,
+            token
+            })
+
+}
+
+
 module.exports = {
                 login,
-                googleSingIn
+                googleSingIn,
+                renewToken
             }
