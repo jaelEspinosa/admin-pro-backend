@@ -3,7 +3,7 @@ const {v4: uuidv4} = require('uuid');
 const { actualizarImagen } = require("../helpers/actualizar-imagen");
 const path = require('path')
 const fs = require('fs');
-const { log } = require("console");
+
 
 
 const fileUpload = async (req, res= response) =>{
@@ -31,6 +31,8 @@ const fileUpload = async (req, res= response) =>{
 
     // Procesar la imagen
     const file= req.files.img  
+
+  
     const extension = file.name.split('.')[file.name.split('.').length-1]
 
     // validar extension
@@ -44,7 +46,7 @@ const fileUpload = async (req, res= response) =>{
     
     // validar tamaño img
     const { size } = req.files.img
-    if( size > 25000){
+    if( size > 500000){
         return res.status(406).json({
             ok:false,
             msg:'Tamaño máximo excedido, se requiere una imagen mas pequeña'

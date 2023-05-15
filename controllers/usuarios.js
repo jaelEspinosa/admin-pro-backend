@@ -46,7 +46,7 @@ const crearUsuario = async (req ,res = response) =>{
    
 
     if (userDB){
-        return res.status(400).json({ok:false, msg:'Este correo ya existe'})
+        return res.status(400).json({ok:false, msg:'Este correo ya está registrado...'})
     };
 
     try {
@@ -79,6 +79,9 @@ const crearUsuario = async (req ,res = response) =>{
 
 
 const actualizarUsuario = async ( req, res = response ) =>{
+
+    //TODO: validar token y comprobar si es el usario correcto.
+
      const uid = req.params.id
   
      
@@ -107,14 +110,19 @@ const actualizarUsuario = async ( req, res = response ) =>{
                    msg:'El email ya esta registrado' 
                });              
            };           
-        };
-          
+        };       
         
+        if(!usuarioDB.google){
+            campos.email=email;
+        }else if(usuarioDB.email !== email){
+            return res.status(400).json({
+                ok: false,
+                msg:'Usuarios de Google no pueden cambiar el Email'
+            })
+        }
 
-
-        campos.email=email;
         const usuarioActualizado = await Usuario.findByIdAndUpdate( uid, campos, {new:true} )
-        
+
         res.json({
             ok:true,
             usuario: usuarioActualizado,
